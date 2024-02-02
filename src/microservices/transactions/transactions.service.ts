@@ -49,7 +49,7 @@ export class TransactionsService {
         end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
         break;
       default:
-        throw new Error('Invalid aggregateType');
+        throw new Error('Invalid aggregate type');
     }
 
     return [start, end];
@@ -111,7 +111,7 @@ export class TransactionsService {
       case 'month':
         return `${date.toLocaleString('default', { month: 'short' })} ${date.getFullYear()}`;
       default:
-        throw new BadRequestException('Invalid aggregateType');
+        throw new BadRequestException('Invalid aggregate type');
     }
   }
 
@@ -183,17 +183,16 @@ export class TransactionsService {
   ) {
     const existingTransaction = await this.transactionRepo.findOneBy({ id });
 
-    if (!existingTransaction) {
-      throw new NotFoundException('Transaction not found');
-    }
-
     const { userId, itemId, quantity } = createTransactionDto;
 
     const user = await this.userRepo.findOneBy({ userId });
     const item = await this.itemRepo.findOneBy({ itemId });
 
-    if (!user || !item) {
-      throw new NotFoundException('User or Item not found');
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    if (!item) {
+      throw new NotFoundException('Item not found');
     }
 
     item.quantity += existingTransaction.quantity;
@@ -227,11 +226,6 @@ export class TransactionsService {
 
   async deleteTransaction(id: number) {
     const transaction = await this.transactionRepo.findOneBy({ id });
-
-    if (!transaction) {
-      throw new NotFoundException('Transaction not found');
-    }
-
     const item = await this.itemRepo.findOneBy({
       itemId: transaction.item.itemId,
     });
