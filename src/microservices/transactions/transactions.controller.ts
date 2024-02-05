@@ -21,16 +21,17 @@ import { TransactionInterceptor } from './transaction.interceptor';
 
 @ApiTags('Transactions')
 @UseGuards(JwtAuthGuard)
+@Serialize(TransactionDto)
 @UseInterceptors(TransactionInterceptor)
 @Controller('transactions')
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
   @Get('all')
-  @Serialize(TransactionDto)
   @UseGuards(JwtAdminGuard)
-  getAllUserTransactionHistory() {
-    return this.transactionsService.getAllUserTransactionHistory();
+  async getAllUserTransactionHistory() {
+    const test = await this.transactionsService.getAllUserTransactionHistory();
+    return test;
   }
 
   @Get('aggregate')

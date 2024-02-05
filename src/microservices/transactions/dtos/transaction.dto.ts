@@ -14,17 +14,8 @@ export class TransactionDto {
   timestamp: Date;
 
   @Expose()
-  user: {
-    userId: number;
-    email: string;
-    admin: boolean;
-  };
+  userId: number;
 
   @Expose()
-  item: {
-    itemId: number;
-    name: string;
-    price: number;
-    quantity: number;
-  };
+  itemId: number;
 }

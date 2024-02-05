@@ -6,14 +6,9 @@ import {
 import { UsersService } from 'src/microservices/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { LoginUserDto } from './dtos/login-user.dto';
 
 const bcrypt = require('bcrypt');
-
-interface UserInterface {
-  email: string;
-  password: string;
-  admin: boolean;
-}
 
 @Injectable()
 export class AuthService {
@@ -22,22 +17,21 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(userInterface: CreateUserDto) {
-    const result = await bcrypt.hash(userInterface.password, 10);
-    const user = this.usersService.create(
-      userInterface.email,
-      result,
-      userInterface.admin,
-    );
-    return user;
+  async signUp(createUserDto: CreateUserDto) {
+    createUserDto.password = await bcrypt.hash(createUserDto.password, 10);
+    const result = this.usersService.create(createUserDto);
+    if (!result) {
+      throw new BadRequestException('User not created');
+    }
+    return true;
   }
 
-  async signIn(userInterface: CreateUserDto) {
-    const [user] = await this.usersService.find(userInterface.email);
+  async signIn(loginUserDto: LoginUserDto) {
+    const [user] = await this.usersService.find(loginUserDto.email);
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    if (!(await bcrypt.compare(userInterface.password, user.password))) {
+    if (!(await bcrypt.compare(loginUserDto.password, user.password))) {
       throw new BadRequestException('Wrong password');
     }
     const payload = {

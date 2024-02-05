@@ -28,7 +28,7 @@ export class UsersController {
 
   @Get('whoami')
   whoAmI(@Request() req) {
-    return req.user;
+    return this.usersService.findOne(req.user.userId);
   }
 
   @Get('all')

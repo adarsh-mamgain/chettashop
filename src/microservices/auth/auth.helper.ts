@@ -1,14 +1,14 @@
 import { User } from 'src/microservices/users/users.entity';
 
-export function authHelper(request: any, user: User[]): any[] {
+export function authHelper(request: any, user?: User[]): string[] {
   const exceptions: string[] = [];
 
-  if (!request.body.email.includes('@')) {
+  if (request.body.email && !request.body.email.includes('@')) {
     exceptions.push('Invalid email format');
   }
 
   if (request.route.path === '/auth/signup') {
-    if (user.length) {
+    if (user[0] != null) {
       exceptions.push('Email already in use');
     }
     if (!request.body.password.match(/[a-z]/i)) {

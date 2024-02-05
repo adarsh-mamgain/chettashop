@@ -120,8 +120,8 @@ export class TransactionsService {
 
     const transactions = await this.transactionRepo
       .createQueryBuilder('transaction')
-      .leftJoinAndSelect('transaction.user', 'user')
-      .leftJoinAndSelect('transaction.item', 'item')
+      .leftJoinAndSelect('transaction.userId', 'user')
+      .leftJoinAndSelect('transaction.itemId', 'item')
       .where('transaction.timestamp BETWEEN :start AND :end', { start, end })
       .getMany();
     // Fix here
@@ -136,45 +136,62 @@ export class TransactionsService {
 
     const transactions = await this.transactionRepo
       .createQueryBuilder('transaction')
-      .leftJoinAndSelect('transaction.user', 'user')
-      .leftJoinAndSelect('transaction.item', 'item')
+      .leftJoinAndSelect('transaction.userId', 'user')
+      .leftJoinAndSelect('transaction.itemId', 'item')
       .where('transaction.timestamp BETWEEN :start AND :end', { start, end })
-      .andWhere(userId ? 'user.userId = :userId' : '1=1', { userId })
+      .andWhere('user.userId = :userId', { userId })
       .getMany();
 
     return this.aggregateTotalAmount(transactions, type);
   }
 
   async getAllUserTransactionHistory() {
-    return this.transactionRepo.createQueryBuilder().getMany();
+    const result = await this.transactionRepo
+      .createQueryBuilder('transaction')
+      .leftJoinAndSelect('transaction.userId', 'user')
+      .leftJoinAndSelect('transaction.itemId', 'item')
+      .getMany();
+    return result.map((transaction) => this.transactionModifier(transaction));
+  }
+
+  private transactionModifier(transaction: Transaction) {
+    const userId = Object(transaction.userId);
+    const itemId = Object(transaction.itemId);
+
+    const result = {
+      ...transaction,
+      id: Number(transaction.id),
+      quantity: Number(transaction.quantity),
+      userId: Number(userId.userId),
+      itemId: Number(itemId.itemId),
+    };
+
+    return result;
   }
 
   async getTransaction(id: number) {
-    return await this.transactionRepo.findOneBy({ id });
+    const transaction = await this.transactionRepo.findOneBy({ id });
+    return this.transactionModifier(transaction);
   }
 
   async createTransaction(createTransactionDto: CreateTransactionDto) {
     const { userId, itemId, quantity } = createTransactionDto;
 
-    const user = await this.userRepo.findOneBy({ userId });
     const item = await this.itemRepo.findOneBy({ itemId });
 
     item.quantity -= quantity;
     await this.itemRepo.save(item);
 
     const totalAmount = this.calculateTotalAmount(item.price, quantity);
-    const now = new Date();
-    now.setDate(now.getDate() - 29);
-    const timestamp = now.toISOString();
 
     const transaction = await this.transactionRepo
       .createQueryBuilder()
       .insert()
-      .values({ user, item, quantity, totalAmount, timestamp: timestamp })
+      .values({ userId, itemId, quantity, totalAmount })
       .returning('*')
       .execute();
-    // Fix here
-    return transaction.raw[0];
+
+    return this.transactionModifier(transaction.raw[0]);
   }
 
   async updateTransaction(
@@ -199,25 +216,21 @@ export class TransactionsService {
     item.quantity -= quantity;
     await this.itemRepo.save(item);
 
-    const timestamp = new Date();
-
     const totalAmount = this.calculateTotalAmount(item.price, quantity);
 
-    existingTransaction.user = user;
-    existingTransaction.item = item;
+    existingTransaction.userId = user.userId;
+    existingTransaction.itemId = item.itemId;
     existingTransaction.quantity = quantity;
     existingTransaction.totalAmount = totalAmount;
-    existingTransaction.timestamp = timestamp;
 
-    const result = await this.transactionRepo
+    const transaction = await this.transactionRepo
       .createQueryBuilder()
       .update()
       .set(existingTransaction)
       .where('id = :id', { id })
       .returning('*')
       .execute();
-    // Fix here
-    return result.raw[0];
+    return this.transactionModifier(transaction.raw[0]);
   }
 
   private calculateTotalAmount(price: number, quantity: number): number {
@@ -227,7 +240,7 @@ export class TransactionsService {
   async deleteTransaction(id: number) {
     const transaction = await this.transactionRepo.findOneBy({ id });
     const item = await this.itemRepo.findOneBy({
-      itemId: transaction.item.itemId,
+      itemId: transaction.itemId,
     });
     item.quantity += transaction.quantity;
     await this.itemRepo.save(item);
@@ -238,7 +251,7 @@ export class TransactionsService {
       .where('id = :id', { id })
       .returning('*')
       .execute();
-    // Fix here
-    return result.raw[0];
+
+    return this.transactionModifier(result.raw[0]);
   }
 }

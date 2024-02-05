@@ -18,9 +18,13 @@ export class AuthInterceptor implements NestInterceptor {
     handler: CallHandler,
   ): Promise<Observable<any>> {
     const request = context.switchToHttp().getRequest();
-    const user = await this.userService.find(request.body.email);
-
-    const helper = authHelper(request, user);
+    let helper: string[] = [];
+    if (request.url !== '/auth/logout') {
+      const user = await this.userService.find(request.body.email);
+      helper = authHelper(request, user);
+    } else {
+      helper = authHelper(request);
+    }
 
     if (helper.length > 0) {
       throw new BadRequestException(helper);

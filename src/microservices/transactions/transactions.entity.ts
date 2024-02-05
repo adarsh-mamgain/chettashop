@@ -14,12 +14,12 @@ export class Transaction {
   id: number;
 
   @ManyToOne(() => User, { eager: true })
-  @JoinColumn({ name: 'user_id', referencedColumnName: 'userId' })
-  user: User;
+  @JoinColumn({ name: 'userId', referencedColumnName: 'userId' })
+  userId: number;
 
   @ManyToOne(() => Item, { eager: true })
-  @JoinColumn({ name: 'item_id', referencedColumnName: 'itemId' })
-  item: Item;
+  @JoinColumn({ name: 'itemId', referencedColumnName: 'itemId' })
+  itemId: number;
 
   @Column()
   quantity: number;
