@@ -142,6 +142,10 @@ export class TransactionsService {
       .andWhere('user.userId = :userId', { userId })
       .getMany();
 
+    if (transactions[0] == null) {
+      throw new NotFoundException('No transactions found for user');
+    }
+
     return this.aggregateTotalAmount(transactions, type);
   }
 
@@ -151,19 +155,22 @@ export class TransactionsService {
       .leftJoinAndSelect('transaction.userId', 'user')
       .leftJoinAndSelect('transaction.itemId', 'item')
       .getMany();
+    console.log('result', result);
     return result.map((transaction) => this.transactionModifier(transaction));
   }
 
   private transactionModifier(transaction: Transaction) {
-    const userId = Object(transaction.userId);
-    const itemId = Object(transaction.itemId);
-
+    let userId: any, itemId: any;
+    if (typeof transaction.userId != 'number') {
+      userId = Object(transaction.userId);
+      itemId = Object(transaction.itemId);
+    }
     const result = {
       ...transaction,
       id: Number(transaction.id),
       quantity: Number(transaction.quantity),
-      userId: Number(userId.userId),
-      itemId: Number(itemId.itemId),
+      userId: userId ? Number(userId.userId) : transaction.userId,
+      itemId: itemId ? Number(itemId.itemId) : transaction.itemId,
     };
 
     return result;
@@ -190,7 +197,7 @@ export class TransactionsService {
       .values({ userId, itemId, quantity, totalAmount })
       .returning('*')
       .execute();
-
+    console.log('passed', transaction.raw[0]);
     return this.transactionModifier(transaction.raw[0]);
   }
 
@@ -239,9 +246,12 @@ export class TransactionsService {
 
   async deleteTransaction(id: number) {
     const transaction = await this.transactionRepo.findOneBy({ id });
+
+    const transactionItemId = Object(transaction.itemId);
     const item = await this.itemRepo.findOneBy({
-      itemId: transaction.itemId,
+      itemId: transactionItemId.itemId,
     });
+
     item.quantity += transaction.quantity;
     await this.itemRepo.save(item);
 

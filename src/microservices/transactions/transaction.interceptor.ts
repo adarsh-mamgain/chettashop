@@ -17,11 +17,15 @@ export class TransactionInterceptor implements NestInterceptor {
     handler: CallHandler,
   ): Promise<Observable<any>> {
     const request = context.switchToHttp().getRequest();
-    const transaction = await this.transactionService.getTransaction(
-      request.params.id,
-    );
 
-    const helper = transactionHelper(request, transaction);
+    let helper: string[] = [];
+    if (request.url === '/transactions/:id') {
+      console.log('here', request.url == '/transactions');
+      const transaction = await this.transactionService.getTransaction(
+        request.params.id,
+      );
+      helper = transactionHelper(request, transaction);
+    }
 
     if (helper.length > 0) {
       throw new BadRequestException(helper);

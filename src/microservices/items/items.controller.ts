@@ -27,13 +27,13 @@ export class ItemsController {
   constructor(private itemService: ItemsService) {}
 
   @Get('all')
-  getAllItems() {
+  getAllItems(): Promise<ItemDto[]> {
     return this.itemService.findAll();
   }
 
   @Post()
   @UseGuards(JwtAdminGuard)
-  async createItems(@Body() body: CreateItemDto) {
+  async createItems(@Body() body: CreateItemDto): Promise<ItemDto> {
     const item = await this.itemService.create(
       body.name,
       body.price,
@@ -43,20 +43,23 @@ export class ItemsController {
   }
 
   @Get('/:id')
-  getItem(@Param('id') id: string) {
+  getItem(@Param('id') id: string): Promise<ItemDto> {
     return this.itemService.findOne(parseInt(id));
   }
 
   @Put('/:id')
   @UseGuards(JwtAdminGuard)
-  async updateItem(@Param('id') id: string, @Body() body: CreateItemDto) {
+  async updateItem(
+    @Param('id') id: string,
+    @Body() body: CreateItemDto,
+  ): Promise<ItemDto> {
     const item = this.itemService.update(parseInt(id), body);
     return item;
   }
 
   @Delete('/:id')
   @UseGuards(JwtAdminGuard)
-  removeItem(@Param('id') id: string) {
+  removeItem(@Param('id') id: string): Promise<ItemDto> {
     return this.itemService.remove(parseInt(id));
   }
 }

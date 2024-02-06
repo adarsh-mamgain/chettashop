@@ -19,11 +19,17 @@ export class AuthService {
 
   async signUp(createUserDto: CreateUserDto) {
     createUserDto.password = await bcrypt.hash(createUserDto.password, 10);
-    const result = this.usersService.create(createUserDto);
-    if (!result) {
+    const user = await this.usersService.create(createUserDto);
+    if (!user) {
       throw new BadRequestException('User not created');
     }
-    return true;
+    const payload = {
+      userId: user.userId,
+    };
+    const token = this.jwtService.sign(payload, {
+      secret: process.env.SECRET_KEY,
+    });
+    return token;
   }
 
   async signIn(loginUserDto: LoginUserDto) {

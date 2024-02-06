@@ -35,7 +35,7 @@ export class UsersService {
   async findAll() {
     const result = await this.repo.createQueryBuilder().getMany();
     return result.map((user) => {
-      delete user.admin;
+      this.userModifier(user, 'all');
       return user;
     });
   }
@@ -51,7 +51,7 @@ export class UsersService {
       .returning('*')
       .execute();
 
-    return result.raw[0];
+    return this.userModifier(result.raw[0]);
   }
 
   async remove(id: number) {
@@ -62,6 +62,18 @@ export class UsersService {
       .returning('*')
       .execute();
 
-    return result.raw[0];
+    return this.userModifier(result.raw[0]);
+  }
+
+  private userModifier(user: User, type?: string) {
+    delete user.password;
+    if (type == 'all') {
+      delete user.admin;
+      return user;
+    } else {
+      delete user.email;
+      delete user.admin;
+      return user;
+    }
   }
 }

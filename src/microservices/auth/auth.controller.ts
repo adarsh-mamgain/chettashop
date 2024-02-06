@@ -28,8 +28,9 @@ export class AuthController {
   async signUp(
     @Body() body: CreateUserDto,
     @Response() res,
-  ): Promise<responseReturn> {
-    const result = await this.authService.signUp(body);
+  ): Promise<{ message: string }> {
+    const token = await this.authService.signUp(body);
+    res.cookie('jwt', token, { httpOnly: true });
     return res.status(201).json({ message: 'User created' });
   }
 
