@@ -20,7 +20,6 @@ export class TransactionInterceptor implements NestInterceptor {
 
     let helper: string[] = [];
     if (request.url === '/transactions/:id') {
-      console.log('here', request.url == '/transactions');
       const transaction = await this.transactionService.getTransaction(
         request.params.id,
       );

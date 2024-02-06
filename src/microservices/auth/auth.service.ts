@@ -26,9 +26,11 @@ export class AuthService {
     const payload = {
       userId: user.userId,
     };
-    const token = this.jwtService.sign(payload, {
-      secret: process.env.SECRET_KEY,
-    });
+    const token = {
+      access_token: this.jwtService.sign(payload, {
+        secret: process.env.SECRET_KEY,
+      }),
+    };
     return token;
   }
 
@@ -43,9 +45,11 @@ export class AuthService {
     const payload = {
       userId: user.userId,
     };
-    const token = this.jwtService.sign(payload, {
-      secret: process.env.SECRET_KEY,
-    });
+    const token = {
+      access_token: this.jwtService.sign(payload, {
+        secret: process.env.SECRET_KEY,
+      }),
+    };
     return token;
   }
 }

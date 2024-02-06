@@ -6,9 +6,8 @@ export class JwtAdminGuard implements CanActivate {
   constructor(private usersService: UsersService) {}
   async canActivate(context: ExecutionContext) {
     const request = await context.switchToHttp().getRequest();
-
     if (!request.user.userId) {
-      false;
+      return false;
     }
     const user = await this.usersService.findOne(request.user.userId);
     return user?.admin || false;

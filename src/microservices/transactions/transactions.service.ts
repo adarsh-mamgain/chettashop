@@ -49,7 +49,7 @@ export class TransactionsService {
         end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
         break;
       default:
-        throw new Error('Invalid aggregate type');
+        throw new BadRequestException('Invalid aggregate type');
     }
 
     return [start, end];
@@ -155,7 +155,6 @@ export class TransactionsService {
       .leftJoinAndSelect('transaction.userId', 'user')
       .leftJoinAndSelect('transaction.itemId', 'item')
       .getMany();
-    console.log('result', result);
     return result.map((transaction) => this.transactionModifier(transaction));
   }
 
@@ -197,7 +196,6 @@ export class TransactionsService {
       .values({ userId, itemId, quantity, totalAmount })
       .returning('*')
       .execute();
-    console.log('passed', transaction.raw[0]);
     return this.transactionModifier(transaction.raw[0]);
   }
 

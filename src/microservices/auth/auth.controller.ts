@@ -15,8 +15,6 @@ import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 import { AuthInterceptor } from './auth.interceptor';
 import { LoginUserDto } from './dtos/login-user.dto';
 
-type responseReturn = { message: string };
-
 @ApiTags('Auth')
 @Controller('auth')
 @Serialize(UserDto)
@@ -25,29 +23,20 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
-  async signUp(
-    @Body() body: CreateUserDto,
-    @Response() res,
-  ): Promise<{ message: string }> {
+  async signUp(@Body() body: CreateUserDto, @Response() res) {
     const token = await this.authService.signUp(body);
-    res.cookie('jwt', token, { httpOnly: true });
-    return res.status(201).json({ message: 'User created' });
+    return res.status(201).json(token);
   }
 
   @Post('signin')
-  async signIn(
-    @Body() body: LoginUserDto,
-    @Response() res,
-  ): Promise<responseReturn> {
+  async signIn(@Body() body: LoginUserDto, @Response() res) {
     const token = await this.authService.signIn(body);
-    res.cookie('jwt', token, { httpOnly: true });
-    return res.status(200).json({ message: 'Login successful' });
+    return res.status(200).json(token);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('logout')
-  logout(@Response({ passthrough: true }) res): Promise<responseReturn> {
-    res.cookie('jwt', '', { expires: new Date() });
+  logout(@Response() res) {
     return res.status(200).json({ message: 'Logged out' });
   }
 }

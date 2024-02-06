@@ -16,7 +16,9 @@ export class JwtMiddleware implements NestMiddleware {
   constructor(private jwtService: JwtService) {}
 
   use(req: Request, res: Response, next: NextFunction) {
-    const token = req.cookies['jwt'];
+    let [type, token] = req.headers.authorization?.split(' ') ?? [];
+    token = type === 'Bearer' ? token : undefined;
+
     if (token) {
       try {
         const decoded = this.jwtService.verify(token, {

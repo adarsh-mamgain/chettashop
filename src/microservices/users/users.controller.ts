@@ -35,8 +35,8 @@ export class UsersController {
 
   @Get('all')
   @UseGuards(JwtAdminGuard)
-  findAllUsers(): Promise<ShowDto[]> {
-    return this.usersService.findAll();
+  async findAllUsers(): Promise<ShowDto[]> {
+    return await this.usersService.findAll();
   }
 
   @Get(':id')
