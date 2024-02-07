@@ -14,20 +14,27 @@ import { Transaction } from './microservices/transactions/transactions.entity';
 import { JwtMiddleware } from './jwt.middleware';
 import { ConfigModule } from '@nestjs/config';
 import { MicroservicesModule } from './microservices/microservices.module';
+import { ThrottlerModule, minutes } from '@nestjs/throttler';
 
 @Module({
   imports: [
     MicroservicesModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.HOST,
-      port: 5432,
-      username: process.env.USERNAME,
-      password: process.env.PASSWORD,
-      database: process.env.DATABASE,
+      host: 'localhost',
+      username: 'adarshmamgain',
+      password: '',
+      database: 'chettashop',
       entities: [User, Item, Transaction],
-      synchronize: false,
+      synchronize: true,
     }),
+    ThrottlerModule.forRoot([
+      {
+        name: 'short',
+        ttl: minutes(5),
+        limit: 5,
+      },
+    ]),
     ConfigModule.forRoot({
       envFilePath: ['.env.development'],
       isGlobal: true,

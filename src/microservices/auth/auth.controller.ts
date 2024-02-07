@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Ip,
   Post,
   Response,
   UseGuards,
@@ -14,6 +15,7 @@ import { UserDto } from './dtos/user.dto';
 import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 import { AuthInterceptor } from './auth.interceptor';
 import { LoginUserDto } from './dtos/login-user.dto';
+import { SigninThrottlerGuard } from 'src/guards/signin-throttler.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -28,6 +30,7 @@ export class AuthController {
     return res.status(201).json(token);
   }
 
+  @UseGuards(SigninThrottlerGuard)
   @Post('signin')
   async signIn(@Body() body: LoginUserDto, @Response() res) {
     const token = await this.authService.signIn(body);
