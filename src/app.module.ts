@@ -20,13 +20,13 @@ import { MicroservicesModule } from './microservices/microservices.module';
     MicroservicesModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: process.env.HOST,
       port: 5432,
-      username: 'adarshmamgain',
-      password: '',
-      database: 'chettashop',
+      username: process.env.USERNAME,
+      password: process.env.PASSWORD,
+      database: process.env.DATABASE,
       entities: [User, Item, Transaction],
-      synchronize: true,
+      synchronize: false,
     }),
     ConfigModule.forRoot({
       envFilePath: ['.env.development'],
