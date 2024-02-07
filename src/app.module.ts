@@ -18,13 +18,15 @@ import { ThrottlerModule, minutes } from '@nestjs/throttler';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: ['.env', '.env.dev'],
+      isGlobal: true,
+    }),
     MicroservicesModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      username: 'adarshmamgain',
-      password: '',
-      database: 'chettashop',
+      url: process.env.URL,
+      ssl: true,
       entities: [User, Item, Transaction],
       synchronize: true,
     }),
@@ -35,10 +37,6 @@ import { ThrottlerModule, minutes } from '@nestjs/throttler';
         limit: 5,
       },
     ]),
-    ConfigModule.forRoot({
-      envFilePath: ['.env.development'],
-      isGlobal: true,
-    }),
   ],
   controllers: [AppController],
   providers: [
