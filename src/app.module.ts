@@ -30,13 +30,7 @@ import { ThrottlerModule, minutes } from '@nestjs/throttler';
       entities: [User, Item, Transaction],
       synchronize: true,
     }),
-    ThrottlerModule.forRoot([
-      {
-        name: 'short',
-        ttl: minutes(5),
-        limit: 5,
-      },
-    ]),
+    ThrottlerModule.forRoot([{ limit: 3, ttl: minutes(5) }]),
   ],
   controllers: [AppController],
   providers: [
