@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Ip,
   Post,
   Response,
   UseGuards,
@@ -15,8 +14,7 @@ import { UserDto } from './dtos/user.dto';
 import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 import { AuthInterceptor } from './auth.interceptor';
 import { LoginUserDto } from './dtos/login-user.dto';
-import { Throttle, minutes } from '@nestjs/throttler';
-import { CustomThrottlerGuard } from 'src/guards/signin-throttler.guard';
+import { CustomThrottlerGuard } from 'src/guards/customThrottler.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -25,7 +23,6 @@ import { CustomThrottlerGuard } from 'src/guards/signin-throttler.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Throttle({ default: { limit: 3, ttl: minutes(5) } })
   @UseGuards(CustomThrottlerGuard)
   @Post('signup')
   async signUp(@Body() body: CreateUserDto, @Response() res) {
@@ -33,7 +30,6 @@ export class AuthController {
     return res.status(201).json(token);
   }
 
-  @Throttle({ default: { limit: 5, ttl: minutes(5) } })
   @UseGuards(CustomThrottlerGuard)
   @Post('signin')
   async signIn(@Body() body: LoginUserDto, @Response() res) {
