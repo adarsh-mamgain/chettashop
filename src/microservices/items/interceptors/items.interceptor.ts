@@ -6,7 +6,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { UsersService } from 'src/microservices/users/services/users.service';
 import { itemsHelper } from '../helpers/items.helper';
 import { ItemsService } from '../services/items.service';
 

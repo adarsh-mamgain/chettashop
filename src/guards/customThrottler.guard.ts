@@ -1,10 +1,4 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import {
-  ThrottlerGenerateKeyFunction,
-  ThrottlerGetTrackerFunction,
-  ThrottlerGuard,
-  ThrottlerOptions,
-} from '@nestjs/throttler';
 import { RateLimiterMemory } from 'rate-limiter-flexible';
 
 const limiter1 = new RateLimiterMemory({
