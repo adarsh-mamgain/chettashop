@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
-import { UsersModule } from 'src/microservices/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/microservices/users/users.entity';
+import { User } from '../users';
+import { AuthService } from './services';
+import { AuthController } from './controllers';
+import { UsersModule } from '../users/users.module';
 
+// Fix here - TypeOrmModule only call in AppModule
 @Module({
   imports: [
     UsersModule,

@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ItemsController } from './items.controller';
-import { ItemsService } from './items.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Item } from './items.entity';
-import { UsersModule } from 'src/microservices/users/users.module';
+import { Item } from './entities';
+import { ItemsController } from './controllers';
+import { ItemsService } from './services';
+import { UsersModule } from '../users/users.module';
 
+// Fix here - TypeOrmModule only call in AppModule
 @Module({
   imports: [UsersModule, TypeOrmModule.forFeature([Item])],
   controllers: [ItemsController],

@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { NextFunction, Request, Response } from 'express';
-import { User } from 'src/microservices/users/users.entity';
+import { User } from './microservices/users';
 
 declare global {
   namespace Express {

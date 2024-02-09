@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
-import { TransactionsService } from './transactions.service';
-import { TransactionsController } from './transactions.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Transaction } from './transactions.entity';
-import { User } from '../users/users.entity';
-import { Item } from '../items/items.entity';
-import { UsersModule } from 'src/microservices/users/users.module';
-import { ItemsModule } from 'src/microservices/items/items.module';
+import { UsersModule } from '../users/users.module';
+import { ItemsModule } from '../items/items.module';
+import { Transaction } from './entities';
+import { User } from '../users';
+import { Item } from '../items';
+import { TransactionsService } from './services';
+import { TransactionsController } from './controllers';
 
+// Fix here - TypeOrmModule only call in AppModule
 @Module({
   imports: [
     UsersModule,

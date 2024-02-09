@@ -4,17 +4,17 @@ import {
   RequestMethod,
   ValidationPipe,
 } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { APP_PIPE } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
+import { ThrottlerModule, minutes } from '@nestjs/throttler';
+import { MicroservicesModule } from './microservices/microservices.module';
+import { User } from './microservices/users';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './microservices/users/users.entity';
-import { APP_PIPE } from '@nestjs/core';
-import { Item } from './microservices/items/items.entity';
-import { Transaction } from './microservices/transactions/transactions.entity';
 import { JwtMiddleware } from './jwt.middleware';
-import { ConfigModule } from '@nestjs/config';
-import { MicroservicesModule } from './microservices/microservices.module';
-import { ThrottlerModule, minutes } from '@nestjs/throttler';
+import { Item } from './microservices/items';
+import { Transaction } from './microservices/transactions';
 
 @Module({
   imports: [

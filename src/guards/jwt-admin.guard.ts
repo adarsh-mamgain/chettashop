@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { UsersService } from 'src/microservices/users/users.service';
+import { UsersService } from 'src/microservices/users/services/users.service';
 
 @Injectable()
 export class JwtAdminGuard implements CanActivate {

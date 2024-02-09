@@ -23,8 +23,9 @@ export class CustomThrottlerGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const response = context.switchToHttp().getResponse();
 
-    const key =
-      request.headers['x-forwarded-for'].toString() + request.body.email;
+    const key = request.headers['x-forwarded-for']
+      ? request.headers['x-forwarded-for'] + request.body.email
+      : request.ip + request.body.email;
 
     if (request.url == '/auth/signup') {
       limiter1.consume(key).catch(() => {
