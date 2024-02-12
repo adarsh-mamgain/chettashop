@@ -9,12 +9,10 @@ import { APP_PIPE } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule, minutes } from '@nestjs/throttler';
 import { MicroservicesModule } from './microservices/microservices.module';
-import { User } from './microservices/users';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { JwtMiddleware } from './jwt.middleware';
-import { Item } from './microservices/items';
-import { Transaction } from './microservices/transactions';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -27,10 +25,13 @@ import { Transaction } from './microservices/transactions';
       type: 'postgres',
       url: process.env.URL,
       ssl: true,
-      entities: [User, Item, Transaction],
+      autoLoadEntities: true,
       synchronize: true,
     }),
     ThrottlerModule.forRoot([{ limit: 3, ttl: minutes(5) }]),
+    CacheModule.register({
+      isGlobal: true,
+    }),
   ],
   controllers: [AppController],
   providers: [

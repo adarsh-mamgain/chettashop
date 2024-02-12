@@ -10,7 +10,6 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { TransactionDto } from '../dtos/transaction.dto';
 import { TransactionsService } from '../services/transactions.service';
 import { CreateTransactionDto } from '../dtos/create-transaction.dto';
@@ -21,7 +20,6 @@ import { TransactionInterceptor } from '../interceptors/transaction.interceptor'
 
 @ApiTags('Transactions')
 @UseGuards(JwtAuthGuard)
-@Serialize(TransactionDto)
 @UseInterceptors(TransactionInterceptor)
 @Controller('transactions')
 export class TransactionsController {
@@ -29,7 +27,7 @@ export class TransactionsController {
 
   @Get('all')
   @UseGuards(JwtAdminGuard)
-  async getAllUserTransactionHistory() {
+  async getAllUserTransactionHistory(): Promise<TransactionDto[]> {
     const test = await this.transactionsService.getAllUserTransactionHistory();
     return test;
   }
@@ -50,29 +48,27 @@ export class TransactionsController {
   }
 
   @Post()
-  @Serialize(TransactionDto)
-  createTransaction(@Body() body: CreateTransactionDto) {
+  createTransaction(
+    @Body() body: CreateTransactionDto,
+  ): Promise<TransactionDto> {
     return this.transactionsService.createTransaction(body);
   }
 
   @Get(':id')
-  @Serialize(TransactionDto)
-  getTransaction(@Param('id') id: number) {
+  getTransaction(@Param('id') id: number): Promise<TransactionDto> {
     return this.transactionsService.getTransaction(id);
   }
 
   @Put(':id')
-  @Serialize(TransactionDto)
   updateTransaction(
     @Param('id') id: number,
     @Body() body: CreateTransactionDto,
-  ) {
+  ): Promise<TransactionDto> {
     return this.transactionsService.updateTransaction(id, body);
   }
 
   @Delete(':id')
-  @Serialize(TransactionDto)
-  deleteTransaction(@Param('id') id: number) {
+  deleteTransaction(@Param('id') id: number): Promise<TransactionDto> {
     return this.transactionsService.deleteTransaction(id);
   }
 }

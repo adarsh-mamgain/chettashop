@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Put,
   Request,
@@ -11,38 +12,47 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UsersService } from '../services/users.service';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
-import { UserDto } from '../dtos/user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAdminGuard } from 'src/guards/jwt-admin.guard';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { UserInterceptor } from '../interceptors/users.interceptor';
 import { IdDto } from '../dtos/id.dto';
 import { ShowDto } from '../dtos/show.dto';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @ApiTags('User')
 @Controller('users')
 @UseGuards(JwtAuthGuard)
-@Serialize(UserDto)
 @UseInterceptors(UserInterceptor)
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private usersService: UsersService,
+  ) {}
 
   @Get('whoami')
-  whoAmI(@Request() req): Promise<UserDto> {
-    return this.usersService.findOne(req.user.userId);
+  whoAmI(@Request() req): Promise<IdDto> {
+    return this.usersService.findOne(parseInt(req.user.userId));
   }
 
   @Get('all')
   @UseGuards(JwtAdminGuard)
   async findAllUsers(): Promise<ShowDto[]> {
-    return await this.usersService.findAll();
+    const value = await this.cacheManager.get('usersAll');
+    if (value) {
+      return Object(value);
+    } else {
+      const result = await this.usersService.findAll();
+      await this.cacheManager.set('usersAll', result, 10000);
+      return result;
+    }
   }
 
   @Get(':id')
   @UseGuards(JwtAdminGuard)
   async findUser(@Param('id') id: string): Promise<IdDto> {
-    return await this.usersService.findOne(parseInt(id));
+    return this.usersService.findOne(parseInt(id));
   }
 
   @Put(':id')

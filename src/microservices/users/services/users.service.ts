@@ -11,21 +11,22 @@ export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
   async create(createUserDto: CreateUserDto) {
-    const user = await this.repo
+    const result = await this.repo
       .createQueryBuilder()
       .insert()
       .values(createUserDto)
       .returning('*')
       .execute();
 
-    return user.raw[0];
+    return this.userModifier(result.raw[0]);
   }
 
-  findOne(userId: number) {
-    return this.repo
+  async findOne(userId: number) {
+    const result = await this.repo
       .createQueryBuilder('user')
       .where('user.userId = :userId', { userId })
       .getOne();
+    return this.userModifier(result, 'findOne');
   }
 
   find(email: string) {
@@ -67,7 +68,9 @@ export class UsersService {
 
   private userModifier(user: User, type?: string) {
     delete user.password;
-    if (type == 'all') {
+    if (type == 'findOne') {
+      return user;
+    } else if (type == 'all') {
       delete user.admin;
       return user;
     } else {

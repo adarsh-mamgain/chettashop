@@ -158,23 +158,6 @@ export class TransactionsService {
     return result.map((transaction) => this.transactionModifier(transaction));
   }
 
-  private transactionModifier(transaction: Transaction) {
-    let userId: any, itemId: any;
-    if (typeof transaction.userId != 'number') {
-      userId = Object(transaction.userId);
-      itemId = Object(transaction.itemId);
-    }
-    const result = {
-      ...transaction,
-      id: Number(transaction.id),
-      quantity: Number(transaction.quantity),
-      userId: userId ? Number(userId.userId) : transaction.userId,
-      itemId: itemId ? Number(itemId.itemId) : transaction.itemId,
-    };
-
-    return result;
-  }
-
   async getTransaction(id: number) {
     const transaction = await this.transactionRepo.findOneBy({ id });
     return this.transactionModifier(transaction);
@@ -261,5 +244,22 @@ export class TransactionsService {
       .execute();
 
     return this.transactionModifier(result.raw[0]);
+  }
+
+  private transactionModifier(transaction: Transaction) {
+    let userId: any, itemId: any;
+    if (typeof transaction.userId != 'number') {
+      userId = Object(transaction.userId);
+      itemId = Object(transaction.itemId);
+    }
+    const result = {
+      ...transaction,
+      id: Number(transaction.id),
+      quantity: Number(transaction.quantity),
+      userId: userId ? Number(userId.userId) : transaction.userId,
+      itemId: itemId ? Number(itemId.itemId) : transaction.itemId,
+    };
+
+    return result;
   }
 }
