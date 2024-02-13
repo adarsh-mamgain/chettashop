@@ -1,3 +1,5 @@
+import { Item } from 'src/microservices/items';
+import { User } from 'src/microservices/users';
 import {
   Column,
   Entity,
@@ -5,8 +7,6 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Item } from '../../items/entities/items.entity';
-import { User } from '../../users/entities/users.entity';
 
 @Entity()
 export class Transaction {

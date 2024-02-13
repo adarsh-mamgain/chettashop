@@ -5,7 +5,6 @@ import {
   AfterUpdate,
   Column,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 

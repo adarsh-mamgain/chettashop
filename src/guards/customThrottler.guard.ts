@@ -1,4 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { ThrottlerException } from '@nestjs/throttler';
 import { RateLimiterMemory } from 'rate-limiter-flexible';
 
 const limiter1 = new RateLimiterMemory({
@@ -21,13 +22,17 @@ export class CustomThrottlerGuard implements CanActivate {
       ? request.headers['x-forwarded-for'] + request.body.email
       : request.ip + request.body.email;
 
-    if (request.url == '/auth/signup') {
+    if (request.url === '/auth/signup') {
       limiter1.consume(key).catch(() => {
+        // Fix here
+        throw new ThrottlerException('Too many requests.');
         response.status(429).json({ message: 'Too many requests.' });
       });
     }
-    if (request.url == '/auth/signin') {
+    if (request.url === '/auth/signin') {
       limiter2.consume(key).catch(() => {
+        // Fix here
+        throw new ThrottlerException('Too many requests.');
         response.status(429).json({ message: 'Too many requests.' });
       });
     }

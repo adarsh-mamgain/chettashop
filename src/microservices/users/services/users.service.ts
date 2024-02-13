@@ -1,8 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { User } from '../entities/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../../auth/dtos/create-user.dto';
+import { User } from '../entities';
 
 const bcrypt = require('bcrypt');
 
@@ -41,7 +41,7 @@ export class UsersService {
     });
   }
 
-  async update(id: number, attrs: Partial<User>) {
+  async update(id: number, attrs: Partial<CreateUserDto>) {
     attrs.password = await bcrypt.hash(attrs.password, 10);
 
     const result = await this.repo

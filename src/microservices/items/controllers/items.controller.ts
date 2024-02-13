@@ -34,12 +34,10 @@ export class ItemsController {
   async getAllItems(): Promise<ItemDto[]> {
     const value = await this.cacheManager.get('itemsAll');
     if (value) {
-      console.log('cache');
       return Object(value);
     } else {
       const result = await this.itemService.findAll();
       await this.cacheManager.set('itemsAll', result, 10000);
-      console.log('database');
       return result;
     }
   }

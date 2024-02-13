@@ -1,16 +1,14 @@
+import { Team } from 'src/microservices/teams';
 import {
   AfterInsert,
   AfterRemove,
   AfterUpdate,
   Column,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-
-// export enum UserRole {
-//   SHOPKEEPER = 'shopkeeper',
-//   CUSTOMER = 'customer',
-// }
 
 @Entity()
 export class User {
@@ -26,15 +24,13 @@ export class User {
   @Column({ default: false })
   admin: boolean;
 
-  // @Column({
-  //   type: 'enum',
-  //   enum: UserRole,
-  //   default: UserRole.CUSTOMER,
-  // })
-  // type: UserRole;
+  @ManyToOne(() => Team, { eager: true })
+  @JoinColumn({ name: 'participant', referencedColumnName: 'teamId' })
+  participant: number;
 
-  // @OneToMany(() => Report, (report) => report.user)
-  // reports: Report[];
+  @ManyToOne(() => Team, { eager: true })
+  @JoinColumn({ name: 'owner', referencedColumnName: 'teamId' })
+  owner: number;
 
   @AfterInsert()
   logInsert() {

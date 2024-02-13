@@ -124,7 +124,6 @@ export class TransactionsService {
       .leftJoinAndSelect('transaction.itemId', 'item')
       .where('transaction.timestamp BETWEEN :start AND :end', { start, end })
       .getMany();
-    // Fix here
     return this.aggregateTotalAmount(transactions, type);
   }
 
