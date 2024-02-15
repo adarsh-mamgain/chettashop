@@ -5,10 +5,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Transaction } from '../entities/transactions.entity';
-import { User } from '../../users/entities/users.entity';
-import { Item } from '../../items/entities/items.entity';
-import { CreateTransactionDto } from '../dtos/create-transaction.dto';
+import { User } from 'src/microservices/users';
+import { Item } from 'src/microservices/items';
+import { Transaction } from '../entities';
+import { CreateTransactionDto } from '../dtos';
 
 @Injectable()
 export class TransactionsService {
@@ -33,16 +33,8 @@ export class TransactionsService {
         end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
         break;
       case 'week':
-        start = new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          1, // Set to 1
-        );
-        end = new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate() + 1, // Set to today
-        );
+        start = new Date(now.getFullYear(), now.getMonth(), 1);
+        end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
         break;
       case 'month':
         start = new Date(now.getFullYear(), now.getMonth() - now.getMonth());
@@ -61,15 +53,12 @@ export class TransactionsService {
   ): any[] {
     const aggregatedData: any[] = [];
 
-    // If it's a 'Week' or 'Month' aggregate, create an array of weeks or months
     const aggregateKeys = this.getAggregateKeys(transactions, aggregateType);
 
-    // Initialize aggregatedData with all keys and totalAmount set to 0
     aggregateKeys.forEach((key) => {
       aggregatedData.push({ dateKey: key, totalAmount: 0 });
     });
 
-    // Update totalAmount based on actual transactions
     transactions.forEach((transaction) => {
       const dateKey = this.getDateKey(transaction.timestamp, aggregateType);
       const existingEntry = aggregatedData.find(
@@ -146,6 +135,19 @@ export class TransactionsService {
     }
 
     return this.aggregateTotalAmount(transactions, type);
+  }
+
+  async getTeamTransaction(teamId: number) {
+    const transactions = await this.transactionRepo
+      .createQueryBuilder('transaction')
+      .leftJoinAndSelect('transaction.userId', 'user')
+      .leftJoinAndSelect('transaction.itemId', 'item')
+      .where('user.teamId = :teamId', { teamId })
+      .getMany();
+
+    return transactions.map((transaction) =>
+      this.transactionModifier(transaction),
+    );
   }
 
   async getAllUserTransactionHistory() {

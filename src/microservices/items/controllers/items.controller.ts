@@ -62,7 +62,7 @@ export class ItemsController {
   @UseGuards(JwtAdminGuard)
   async updateItem(
     @Param('id') id: string,
-    @Body() body: CreateItemDto,
+    @Body() body: Partial<CreateItemDto>,
   ): Promise<ItemDto> {
     const item = this.itemService.update(parseInt(id), body);
     return item;

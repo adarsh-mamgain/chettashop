@@ -25,12 +25,8 @@ export class User {
   admin: boolean;
 
   @ManyToOne(() => Team, { eager: true })
-  @JoinColumn({ name: 'participant', referencedColumnName: 'teamId' })
-  participant: number;
-
-  @ManyToOne(() => Team, { eager: true })
-  @JoinColumn({ name: 'owner', referencedColumnName: 'teamId' })
-  owner: number;
+  @JoinColumn({ name: 'teamId', referencedColumnName: 'teamId' })
+  teamId: number;
 
   @AfterInsert()
   logInsert() {

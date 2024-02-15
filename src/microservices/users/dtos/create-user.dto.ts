@@ -19,9 +19,5 @@ export class CreateUserDto {
 
   @IsNumber()
   @IsOptional()
-  participant: number;
-
-  @IsNumber()
-  @IsOptional()
-  owner: number;
+  teamId: number;
 }

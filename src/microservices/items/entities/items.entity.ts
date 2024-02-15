@@ -1,4 +1,3 @@
-// import { Report } from 'src/reports/report.entity';
 import {
   AfterInsert,
   AfterRemove,
@@ -7,11 +6,6 @@ import {
   Entity,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-
-// export enum UserRole {
-//   SHOPKEEPER = 'shopkeeper',
-//   CUSTOMER = 'customer',
-// }
 
 @Entity()
 export class Item {

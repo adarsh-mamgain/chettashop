@@ -1,4 +1,10 @@
-import { IsBoolean, IsEmail, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateUserDto {
   @IsEmail()
@@ -9,4 +15,8 @@ export class CreateUserDto {
 
   @IsBoolean()
   admin: boolean;
+
+  @IsNumber()
+  @IsOptional()
+  teamId: number;
 }

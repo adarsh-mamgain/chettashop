@@ -59,7 +59,7 @@ export class UsersController {
   @UseGuards(JwtAdminGuard)
   async updateUser(
     @Param('id') id: string,
-    @Body() body: CreateUserDto,
+    @Body() body: Partial<CreateUserDto>,
   ): Promise<IdDto> {
     return await this.usersService.update(parseInt(id), body);
   }

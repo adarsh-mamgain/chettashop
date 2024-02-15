@@ -30,10 +30,16 @@ export class ItemsService {
   }
 
   async update(id: number, attrs: Partial<Item>) {
+    const item = await this.findOne(id);
+
+    attrs.name ? (item.name = attrs.name) : item.name;
+    attrs.price ? (item.price = attrs.price) : item.price;
+    attrs.quantity ? (item.quantity = attrs.quantity) : item.quantity;
+
     const result = await this.repo
       .createQueryBuilder()
       .update()
-      .set(attrs)
+      .set(item)
       .where('itemId = :id', { id })
       .returning('*')
       .execute();

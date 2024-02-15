@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  Request,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -45,6 +46,11 @@ export class TransactionsController {
     @Query('userId') userId: number,
   ) {
     return this.transactionsService.getUserTransactionAggregate(type, userId);
+  }
+
+  @Get('/teams')
+  getTransactionTeam(@Request() req) {
+    return this.transactionsService.getTeamTransaction(req.user.teamId);
   }
 
   @Post()
