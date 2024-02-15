@@ -84,7 +84,6 @@ export class TeamsService {
   async delete(ownerId: number) {
     const owner = await this.findOwner(ownerId);
     const teamId = owner.teamId;
-    console.log(owner.teamId);
 
     (await this.usersService.findByTeam(teamId)).map(async (user) => {
       this.usersService.update(user.userId, { teamId: null });
@@ -96,7 +95,6 @@ export class TeamsService {
       .where('teamId = :teamId', { teamId })
       .returning('*')
       .execute();
-    console.log(result);
 
     return result.raw[0];
   }

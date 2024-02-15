@@ -29,8 +29,7 @@ export class TransactionsController {
   @Get('all')
   @UseGuards(JwtAdminGuard)
   async getAllUserTransactionHistory(): Promise<TransactionDto[]> {
-    const test = await this.transactionsService.getAllUserTransactionHistory();
-    return test;
+    return await this.transactionsService.getAllUserTransactionHistory();
   }
 
   @Get('aggregate')
@@ -50,7 +49,7 @@ export class TransactionsController {
 
   @Get('/teams')
   getTransactionTeam(@Request() req) {
-    return this.transactionsService.getTeamTransaction(req.user.teamId);
+    return this.transactionsService.getTeamTransaction(req.user.userId);
   }
 
   @Post()

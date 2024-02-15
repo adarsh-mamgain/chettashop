@@ -137,12 +137,18 @@ export class TransactionsService {
     return this.aggregateTotalAmount(transactions, type);
   }
 
-  async getTeamTransaction(teamId: number) {
+  async getTeamTransaction(userId: number) {
+    const { teamId } = Object(
+      await this.userRepo.findOne({ where: { userId } }),
+    );
+    const getTeamId = teamId.teamId;
+
     const transactions = await this.transactionRepo
       .createQueryBuilder('transaction')
       .leftJoinAndSelect('transaction.userId', 'user')
+      .leftJoinAndSelect('user.teamId', 'team')
       .leftJoinAndSelect('transaction.itemId', 'item')
-      .where('user.teamId = :teamId', { teamId })
+      .where('team.teamId = :getTeamId', { getTeamId })
       .getMany();
 
     return transactions.map((transaction) =>

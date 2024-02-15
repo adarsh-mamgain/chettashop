@@ -5,7 +5,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Swagger configuration
   const options = new DocumentBuilder()
     .setTitle('ChettaShop')
     .setDescription('Perform all CRUD operations')

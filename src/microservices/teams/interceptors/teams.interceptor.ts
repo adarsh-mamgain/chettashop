@@ -8,7 +8,6 @@ import {
 import { Observable } from 'rxjs';
 import { teamsHelper } from '../helpers';
 import { TeamsService } from '../services';
-import { UsersService } from 'src/microservices/users';
 
 @Injectable()
 export class TeamsInterceptor implements NestInterceptor {
@@ -27,6 +26,12 @@ export class TeamsInterceptor implements NestInterceptor {
     ) {
       const teams = await this.teamService.find(request.body.name);
       helper = teamsHelper(request, teams[0]);
+    } else if (
+      request.route.path === '/teams/member/:id' ||
+      request.route.path === '/teams/all'
+    ) {
+      const user = await this.teamService.findMember(request.params.id);
+      helper = teamsHelper(request, user);
     } else {
       const teams = await this.teamService.findOne(parseInt(request.params.id));
       helper = teamsHelper(request, teams);
