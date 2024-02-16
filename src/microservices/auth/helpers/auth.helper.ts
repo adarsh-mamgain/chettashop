@@ -1,4 +1,4 @@
-import { User } from 'src/microservices/users/entities/users.entity';
+import { User } from 'src/microservices/users';
 
 export function authHelper(request: any, user?: User[]): string[] {
   const exceptions: string[] = [];

@@ -8,11 +8,11 @@ import {
 } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from 'src/microservices/users/dtos/create-user.dto';
 import { JwtAuthGuard } from '../../../guards/jwt-auth.guard';
 import { AuthInterceptor } from '../interceptors/auth.interceptor';
 import { LoginUserDto } from '../dtos/login-user.dto';
 import { CustomThrottlerGuard } from 'src/guards/customThrottler.guard';
+import { CreateUserDto } from '../dtos';
 
 @ApiTags('Auth')
 @Controller('auth')

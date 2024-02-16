@@ -1,4 +1,5 @@
 import { User } from 'src/microservices/users';
+
 import {
   AfterInsert,
   AfterRemove,

@@ -6,8 +6,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { UsersService } from 'src/microservices/users/services/users.service';
 import { usersHelper } from '../helpers/users.helper';
+import { UsersService } from '../services';
 
 @Injectable()
 export class UserInterceptor implements NestInterceptor {
