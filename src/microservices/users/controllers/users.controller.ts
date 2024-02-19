@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UsersService } from '../services/users.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAdminGuard } from 'src/guards/jwt-admin.guard';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { UserInterceptor } from '../interceptors/users.interceptor';
@@ -22,9 +22,10 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 
 @ApiTags('User')
-@Controller('users')
-@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT')
 @UseInterceptors(UserInterceptor)
+@UseGuards(JwtAuthGuard)
+@Controller('users')
 export class UsersController {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,

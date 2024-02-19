@@ -11,17 +11,18 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { TeamsService } from '../services';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { CreateTeamDto } from '../dtos';
 import { TeamsInterceptor } from '../interceptors';
 // import { TeamOwnerGuard } from 'src/guards/teamOwner.guard';
 
 @ApiTags('Team')
-@Controller('teams')
-@UseGuards(JwtAuthGuard)
-// @UseGuards(TeamOwnerGuard)
+@ApiBearerAuth('JWT')
 @UseInterceptors(TeamsInterceptor)
+@UseGuards(JwtAuthGuard)
+@Controller('teams')
+// @UseGuards(TeamOwnerGuard)
 export class TeamsController {
   constructor(private teamsService: TeamsService) {}
 

@@ -14,14 +14,15 @@ import {
 import { TransactionDto } from '../dtos/transaction.dto';
 import { TransactionsService } from '../services/transactions.service';
 import { CreateTransactionDto } from '../dtos/create-transaction.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { JwtAdminGuard } from 'src/guards/jwt-admin.guard';
 import { TransactionInterceptor } from '../interceptors/transaction.interceptor';
 
 @ApiTags('Transactions')
-@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT')
 @UseInterceptors(TransactionInterceptor)
+@UseGuards(JwtAuthGuard)
 @Controller('transactions')
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}

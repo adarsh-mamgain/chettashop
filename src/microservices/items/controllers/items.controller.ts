@@ -13,7 +13,7 @@ import {
 import { ItemDto } from '../dtos/item.dto';
 import { ItemsService } from '../services/items.service';
 import { CreateItemDto } from '../dtos/create-item.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAdminGuard } from 'src/guards/jwt-admin.guard';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { ItemsInterceptor } from '../interceptors/items.interceptor';
@@ -21,9 +21,10 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 
 @ApiTags('Item')
-@Controller('items')
-@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT')
 @UseInterceptors(ItemsInterceptor)
+@UseGuards(JwtAuthGuard)
+@Controller('items')
 export class ItemsController {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
