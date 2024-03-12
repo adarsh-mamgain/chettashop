@@ -12,9 +12,9 @@ import {
 } from '@nestjs/common';
 import { TeamsService } from '../services';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { CreateTeamDto } from '../dtos';
 import { TeamsInterceptor } from '../interceptors';
+import { JwtAuthGuard } from 'src/guards';
 // import { TeamOwnerGuard } from 'src/guards/teamOwner.guard';
 
 @ApiTags('Team')

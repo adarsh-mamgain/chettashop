@@ -8,11 +8,10 @@ import {
 } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../../../guards/jwt-auth.guard';
 import { AuthInterceptor } from '../interceptors/auth.interceptor';
 import { LoginUserDto } from '../dtos/login-user.dto';
-import { CustomThrottlerGuard } from 'src/guards/customThrottler.guard';
 import { CreateUserDto } from '../dtos';
+import { CustomThrottlerGuard, JwtAuthGuard } from 'src/guards';
 
 @ApiTags('Auth')
 @ApiBearerAuth('JWT')

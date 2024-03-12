@@ -13,13 +13,12 @@ import {
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UsersService } from '../services/users.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAdminGuard } from 'src/guards/jwt-admin.guard';
-import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { UserInterceptor } from '../interceptors/users.interceptor';
 import { IdDto } from '../dtos/id.dto';
 import { ShowDto } from '../dtos/show.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { JwtAdminGuard, JwtAuthGuard } from 'src/guards';
 
 @ApiTags('User')
 @ApiBearerAuth('JWT')

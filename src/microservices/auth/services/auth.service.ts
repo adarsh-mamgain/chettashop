@@ -8,7 +8,7 @@ import { CreateUserDto } from '../dtos/create-user.dto';
 import { LoginUserDto } from '../dtos/login-user.dto';
 import { UsersService } from 'src/microservices/users';
 
-const bcrypt = require('bcrypt');
+import bcrypt = require('bcrypt');
 
 @Injectable()
 export class AuthService {

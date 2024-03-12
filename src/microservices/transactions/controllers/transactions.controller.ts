@@ -15,9 +15,8 @@ import { TransactionDto } from '../dtos/transaction.dto';
 import { TransactionsService } from '../services/transactions.service';
 import { CreateTransactionDto } from '../dtos/create-transaction.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
-import { JwtAdminGuard } from 'src/guards/jwt-admin.guard';
 import { TransactionInterceptor } from '../interceptors/transaction.interceptor';
+import { JwtAdminGuard, JwtAuthGuard } from 'src/guards';
 
 @ApiTags('Transactions')
 @ApiBearerAuth('JWT')
