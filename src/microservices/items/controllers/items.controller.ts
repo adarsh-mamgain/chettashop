@@ -17,7 +17,8 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ItemsInterceptor } from '../interceptors/items.interceptor';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { JwtAdminGuard, JwtAuthGuard } from 'src/guards';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { JwtAdminGuard } from 'src/guards/jwt-admin.guard';
 
 @ApiTags('Item')
 @ApiBearerAuth('JWT')

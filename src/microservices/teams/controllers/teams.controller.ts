@@ -14,7 +14,8 @@ import { TeamsService } from '../services';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateTeamDto } from '../dtos';
 import { TeamsInterceptor } from '../interceptors';
-import { JwtAuthGuard } from 'src/guards';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+
 // import { TeamOwnerGuard } from 'src/guards/teamOwner.guard';
 
 @ApiTags('Team')
