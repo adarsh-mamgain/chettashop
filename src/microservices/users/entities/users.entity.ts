@@ -1,4 +1,4 @@
-import { Team } from 'src/microservices/teams';
+import { Team } from '../../teams/entities/teams.entity';
 import {
   AfterInsert,
   AfterRemove,

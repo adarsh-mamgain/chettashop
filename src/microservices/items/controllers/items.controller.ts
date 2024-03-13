@@ -17,8 +17,8 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ItemsInterceptor } from '../interceptors/items.interceptor';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
-import { JwtAdminGuard } from 'src/guards/jwt-admin.guard';
+import { JwtAuthGuard } from '../../../guards/jwt-auth.guard';
+import { JwtAdminGuard } from '../../../guards/jwt-admin.guard';
 
 @ApiTags('Item')
 @ApiBearerAuth('JWT')
@@ -65,8 +65,7 @@ export class ItemsController {
     @Param('id') id: string,
     @Body() body: Partial<CreateItemDto>,
   ): Promise<ItemDto> {
-    const item = this.itemService.update(parseInt(id), body);
-    return item;
+    return this.itemService.update(parseInt(id), body);
   }
 
   @Delete('/:id')

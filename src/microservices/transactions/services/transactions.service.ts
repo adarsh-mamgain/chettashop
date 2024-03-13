@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from 'src/microservices/users';
-import { Item } from 'src/microservices/items';
+import { User } from '../../users/entities/users.entity';
+import { Item } from '../../items/entities/items.entity';
 import { Transaction } from '../entities';
 import { CreateTransactionDto } from '../dtos';
 

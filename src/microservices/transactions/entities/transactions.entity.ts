@@ -1,5 +1,5 @@
-import { Item } from 'src/microservices/items';
-import { User } from 'src/microservices/users';
+import { Item } from '../../items/entities/items.entity';
+import { User } from '../../users/entities/users.entity';
 import {
   Column,
   Entity,

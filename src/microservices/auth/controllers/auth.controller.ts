@@ -11,8 +11,8 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthInterceptor } from '../interceptors/auth.interceptor';
 import { LoginUserDto } from '../dtos/login-user.dto';
 import { CreateUserDto } from '../dtos';
-import { CustomThrottlerGuard } from 'src/guards/customThrottler.guard';
-import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { CustomThrottlerGuard } from '../../../guards/customThrottler.guard';
+import { JwtAuthGuard } from '../../../guards/jwt-auth.guard';
 
 @ApiTags('Auth')
 @ApiBearerAuth('JWT')

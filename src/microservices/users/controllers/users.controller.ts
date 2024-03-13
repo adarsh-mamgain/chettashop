@@ -18,8 +18,8 @@ import { IdDto } from '../dtos/id.dto';
 import { ShowDto } from '../dtos/show.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
-import { JwtAdminGuard } from 'src/guards/jwt-admin.guard';
+import { JwtAuthGuard } from '../../../guards/jwt-auth.guard';
+import { JwtAdminGuard } from '../../../guards/jwt-admin.guard';
 
 @ApiTags('User')
 @ApiBearerAuth('JWT')

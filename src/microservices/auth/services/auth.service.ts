@@ -6,7 +6,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { LoginUserDto } from '../dtos/login-user.dto';
-import { UsersService } from 'src/microservices/users';
+import { UsersService } from '../../users/services/users.service';
 
 import bcrypt = require('bcrypt');
 

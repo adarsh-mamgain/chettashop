@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Team } from '../entities';
 import { CreateTeamDto } from '../dtos';
-import { UsersService } from 'src/microservices/users';
+import { UsersService } from '../../users/services/users.service';
 
 @Injectable()
 export class TeamsService {
