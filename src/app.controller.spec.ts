@@ -15,8 +15,10 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('should be defined', () => {
+      expect(appController.getHello()).toBe(
+        '<h1>Chetta Shop</h1>\n<h2>Application is <a role="button" href="/api" style="color: red;">here</a></h2>',
+      );
     });
   });
 });

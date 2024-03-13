@@ -23,10 +23,11 @@ import { CacheModule } from '@nestjs/cache-manager';
     MicroservicesModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: process.env.URL,
-      ssl: true,
+      url:
+        process.env.NODE_ENV == 'test' ? process.env.TEST_URL : process.env.URL,
+      ssl: process.env.NODE_ENV == 'test' ? false : true,
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: process.env.NODE_ENV == 'dev' ? true : false,
     }),
     ThrottlerModule.forRoot([{ limit: 3, ttl: minutes(5) }]),
     CacheModule.register({
@@ -48,7 +49,10 @@ export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(JwtMiddleware)
-      .exclude({ path: 'auth/signin', method: RequestMethod.POST })
+      .exclude(
+        { path: 'auth/signin', method: RequestMethod.POST },
+        { path: 'auth/signup', method: RequestMethod.POST },
+      )
       .forRoutes('*');
   }
 }
