@@ -27,7 +27,7 @@ export class AuthService {
       userId: user.userId,
     };
     const token = {
-      access_token: this.jwtService.sign(payload, {
+      accessToken: this.jwtService.sign(payload, {
         secret: process.env.SECRET_KEY,
       }),
     };
@@ -46,7 +46,7 @@ export class AuthService {
       userId: user.userId,
     };
     const token = {
-      access_token: this.jwtService.sign(payload, {
+      accessToken: this.jwtService.sign(payload, {
         secret: process.env.SECRET_KEY,
       }),
     };
