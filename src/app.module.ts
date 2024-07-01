@@ -13,6 +13,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { JwtMiddleware } from './jwt.middleware';
 import { CacheModule } from '@nestjs/cache-manager';
+import { User } from './microservices/users';
+import { Item } from './microservices/items';
+import { Transaction } from './microservices/transactions';
+import { Team } from './microservices/teams';
 
 @Module({
   imports: [
@@ -25,8 +29,13 @@ import { CacheModule } from '@nestjs/cache-manager';
       type: 'postgres',
       url:
         process.env.NODE_ENV == 'test' ? process.env.TEST_URL : process.env.URL,
-      ssl: process.env.NODE_ENV == 'test' ? false : true,
-      autoLoadEntities: true,
+      ssl:
+        process.env.NODE_ENV == 'test'
+          ? false
+          : process.env.NODE_ENV == 'dev'
+            ? false
+            : true,
+      entities: [User, Item, Team, Transaction],
       synchronize: process.env.NODE_ENV == 'dev' ? true : false,
     }),
     ThrottlerModule.forRoot([{ limit: 3, ttl: minutes(5) }]),

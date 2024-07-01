@@ -29,7 +29,7 @@ export class ItemsService {
       .getOne();
   }
 
-  async update(id: number, attrs: Partial<Item>) {
+  async update(id: number, attrs: Partial<Item>): Promise<Item> {
     const item = await this.findOne(id);
 
     attrs.name ? (item.name = attrs.name) : item.name;
